@@ -1,8 +1,10 @@
 name: Fetch live demo
 on:
-  push:
-    paths: ['.github/workflows/fetch-live-demo.yml']
   workflow_dispatch:
+    inputs:
+      share:
+        description: 'Temporary _vercel_share token (expires within 24h)'
+        required: true
 permissions:
   contents: write
 jobs:
@@ -15,9 +17,11 @@ jobs:
           set -e
           B=https://eat2save-demo.vercel.app
           mkdir -p live/assets live/cua-hang live/khach-hang live/quan-tri
-          curl -sSL "$B/" -o live/index.html -w "root %{http_code}\n" || true
-          for p in cua-hang/ khach-hang/ quan-tri/; do curl -fsSL "$B/$p" -o "live/${p}index.html"; done
-          for i in 0 1 2 3 4 5 6 7 8 9; do curl -fsSL "$B/assets/d$i.bin" -o "live/assets/d$i.bin"; done
+          echo "::add-mask::${{ inputs.share }}"
+          curl -sS -c jar -o /dev/null -w "share %{http_code}\n" "$B/?_vercel_share=${{ inputs.share }}"
+          for p in "" cua-hang/ khach-hang/ quan-tri/; do curl -fsSL -b jar "$B/$p" -o "live/${p}index.html"; done
+          for i in 0 1 2 3 4 5 6 7 8 9; do curl -fsSL -b jar "$B/assets/d$i.bin" -o "live/assets/d$i.bin"; done
+          rm -f jar
           ls -la live live/assets
       - name: Commit
         run: |
