@@ -1,0 +1,47 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Eat2Save – Demo sản phẩm</title>
+<style>
+body{background:var(--cream)}
+header{max-width:1440px;margin:0 auto;padding:26px 24px 6px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+header h1{margin:0;font-size:28px;color:var(--g)}header h1 b{color:var(--o2)}
+header p{margin:6px 0 0;color:var(--mut);font-size:14px;max-width:720px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fff;border:1px solid var(--bd);border-radius:16px;padding:10px 12px;font-size:13px}
+.ctl .clk{font-size:20px;font-weight:700;color:var(--g);min-width:62px}
+.rowx{max-width:1440px;margin:0 auto;padding:14px 24px;display:flex;flex-wrap:wrap;gap:28px;justify-content:center}
+.colx{display:flex;flex-direction:column;gap:10px;align-items:center}
+.colx h2{margin:0;font-size:17px}.colx .d{font-size:12px;color:var(--mut);text-align:center;max-width:350px}
+.dev{width:351px;height:760px;border-radius:40px;border:8px solid var(--ink);overflow:hidden;background:#fff;box-shadow:0 16px 40px rgba(11,94,59,.16)}
+.dev iframe{width:390px;height:844px;border:0;transform:scale(.8595);transform-origin:0 0}
+.web{width:min(1360px,100%);height:780px;border-radius:14px;border:1px solid #DDD6C8;overflow:hidden;background:#fff;box-shadow:0 16px 40px rgba(11,94,59,.12)}.web iframe{width:100%;height:100%;border:0}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--g);font-weight:600}.live i{width:8px;height:8px;border-radius:4px;background:#2DBE60;box-shadow:0 0 0 4px rgba(45,190,96,.2)}
+footer{text-align:center;font-size:12px;color:var(--mut);padding:24px}
+.steps{max-width:1440px;margin:0 auto;padding:4px 24px 0;display:flex;flex-wrap:wrap;gap:8px;font-size:12px}
+.steps span{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:6px 10px}
+</style></head><body>
+<header><div><h1>Eat<b>2</b>Save · <span id="t1">Demo sản phẩm chạy được</span></h1><p id="t2"></p><span class="live"><i></i><span id="t3"></span></span></div>
+<div class="ctl"><span id="t4" class="muted"></span><span class="clk" id="clk">--:--</span><button class="chip" data-t="-30">−30′</button><button class="chip" data-t="30">+30′</button><button class="chip" data-set="19:20">19:20</button><button class="chip" data-set="20:05">20:05</button><button class="chip" data-set="21:35">21:35</button><span style="width:1px;height:24px;background:var(--bd2)"></span><button class="chip" data-l="vi">VI</button><button class="chip" data-l="en">EN</button><button class="chip" id="rst" style="color:var(--red)"></button></div></header>
+<div class="steps" id="steps"></div>
+<div class="rowx">
+ <div class="colx"><h2 id="h1"></h2><div class="d" id="d1"></div><div class="dev"><iframe src="khach-hang/index.html#/home" title="Customer app"></iframe></div><a class="btn sm" href="khach-hang/index.html" target="_blank" id="o1"></a></div>
+ <div class="colx"><h2 id="h2"></h2><div class="d" id="d2"></div><div class="dev"><iframe src="cua-hang/index.html#/today" title="Store portal"></iframe></div><a class="btn sm" href="cua-hang/index.html" target="_blank" id="o2"></a></div>
+</div>
+<div class="rowx"><div class="colx" style="width:100%"><h2 id="h3"></h2><div class="d" id="d3"></div><div class="web"><iframe src="quan-tri/index.html#/overview" title="Admin console"></iframe></div><a class="btn sm" href="quan-tri/index.html" target="_blank" id="o3"></a></div></div>
+<footer id="ft"></footer>
+<script>(async()=>{try{const p=await Promise.all(Array.from({length:10},(_,i)=>'assets/d'+i+'.bin').map(u=>fetch(u).then(r=>{if(!r.ok)throw new Error(u);return r.arrayBuffer()})));const t=await new Response(new Blob(p).stream().pipeThrough(new DecompressionStream('gzip'))).text();const B=JSON.parse(t);const st=document.createElement('style');st.textContent=B.css;document.head.appendChild(st);for(const k of ["qrcode", "core"]){const s=document.createElement('script');s.text=B[k];document.body.appendChild(s);}window.dispatchEvent(new Event('e2s-ready'));}catch(e){document.body.insertAdjacentHTML('beforeend','<p style="font:14px sans-serif;padding:20px">Không tải được bản demo / Demo failed to load: '+e.message+'</p>')}})();</script><script>window.addEventListener("e2s-ready",()=>{
+const L=E2S.L;
+function txt(){
+ const T={t1:L('Demo sản phẩm chạy được','Working product demo'),t2:L('Ba ứng dụng dùng chung một "backend" chạy ngay trong trình duyệt: thao tác ở app này hiện ngay ở app kia. Thử: đặt một combo ở app khách → cửa hàng nhận thông báo → quét mã → đơn hoàn tất ở cả hai bên và trên trang quản trị.','Three apps share one in-browser "backend": an action in one app shows up instantly in the others. Try it: reserve a combo in the customer app → the store gets an alert → scan the code → the order completes on both sides and in the admin console.'),t3:L('Đồng bộ trực tiếp giữa 3 app','Live sync across the 3 apps'),t4:L('Đồng hồ demo','Demo clock'),
+ h1:L('1 · Ứng dụng khách hàng (PWA)','1 · Customer app (PWA)'),d1:L('Tìm deal gần bạn → Thẻ thông tin món → trả VietQR → mã QR/6 số nhận hàng','Find nearby deals → Food Info Card → pay by VietQR → QR / 6-digit pickup code'),
+ h2:L('2 · Cổng cửa hàng','2 · Store portal'),d2:L('Đăng combo S/M/L từ mẫu (liệt kê từng món) → nhận đơn → quét mã giao hàng → sao kê tuần','List an S/M/L combo from a template (every item listed) → get orders → scan to hand over → weekly statement'),
+ h3:L('3 · Trang quản trị (web)','3 · Admin console (web)'),d3:L('Duyệt cửa hàng, kiểm duyệt tin, khiếu nại & hoàn tiền, đối soát & chi trả, nhật ký','Store approval, listing moderation, complaints & refunds, reconciliation & payouts, audit log'),
+ o1:L('Mở toàn màn hình','Open full screen'),o2:L('Mở toàn màn hình','Open full screen'),o3:L('Mở toàn màn hình','Open full screen'),rst:L('Khôi phục dữ liệu mẫu','Reset sample data'),
+ ft:L('Eat2Save · Nhóm 1 · EXE101 (MKT1926-DIG) · Bản demo MVP: thanh toán VietQR, Zalo ZNS và camera được mô phỏng; tên cửa hàng là minh họa.','Eat2Save · Group 1 · EXE101 (MKT1926-DIG) · MVP demo: VietQR payment, Zalo ZNS and the camera are simulated; store names are fictional.')};
+ for(const k in T){const el=document.getElementById(k); if(el) el.textContent=T[k];}
+ const S=[L('① Khách: chọn "Combo M · Sừng bò & bánh chuối" → Đặt ngay','① Buyer: open "Combo M · Croissants & banana cake" → Reserve'),L('② Đăng nhập Google → Thanh toán VietQR → "Mô phỏng: tôi đã chuyển khoản"','② Sign in with Google → Pay with VietQR → "Simulate: I have paid"'),L('③ Cửa hàng: thông báo đơn mới → Quét QR → chạm đơn để quét','③ Store: new-order alert → Scan QR → tap the order to scan'),L('④ Khách: đơn tự chuyển "Đã nhận hàng" → đánh giá','④ Buyer: order flips to "Picked up" → leave a review')];
+ document.getElementById('steps').innerHTML=S.map(s=>'<span>'+s+'</span>').join('');
+ document.querySelectorAll('[data-l]').forEach(b=>b.classList.toggle('on',b.dataset.l===E2S.lang()));
+}
+txt(); E2S.on('lang',txt);
+setInterval(()=>{document.getElementById('clk').textContent=E2S.hm(E2S.now());},500);
+document.querySelector('.ctl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.t)E2S.shift(Number(b.dataset.t));else if(b.dataset.set)E2S.setClock(E2S.at(E2S.today(),b.dataset.set));else if(b.dataset.l)E2S.setLang(b.dataset.l);else if(b.id==='rst'&&confirm(L('Xóa mọi thao tác và khôi phục dữ liệu mẫu?','Discard all changes and restore sample data?'))){E2S.reset();document.querySelectorAll('iframe').forEach(f=>f.contentWindow.location.reload());}});
+});</script></body></html>
