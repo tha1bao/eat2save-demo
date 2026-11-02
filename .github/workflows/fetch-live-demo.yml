@@ -1,4 +1,4 @@
-name: Fetch live demo
+name: Check deployed demo
 on:
   workflow_dispatch:
     inputs:
@@ -8,28 +8,17 @@ on:
       base:
         description: 'Deployment base URL'
         required: true
-permissions:
-  contents: write
 jobs:
-  fetch:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Download current deployment
+      - name: Download deployment and print checksums
         run: |
           set -e
           B=${{ inputs.base }}
-          mkdir -p live/assets live/cua-hang live/khach-hang live/quan-tri
-          echo "::add-mask::${{ inputs.share }}"
+          mkdir -p s/assets s/cua-hang s/khach-hang s/quan-tri
           curl -sS -L -c jar -b jar -o /dev/null -w "share %{http_code}\n" "$B/?_vercel_share=${{ inputs.share }}"
-          for p in "" cua-hang/ khach-hang/ quan-tri/; do curl -fsSL -b jar "$B/$p" -o "live/${p}index.html"; done
-          for i in 0 1 2 3 4 5 6 7 8 9; do curl -fsSL -b jar "$B/assets/d$i.bin" -o "live/assets/d$i.bin"; done
+          for p in "" cua-hang/ khach-hang/ quan-tri/; do curl -fsSL -b jar "$B/$p" -o "s/${p}index.html"; done
+          for i in 0 1 2 3 4 5 6 7 8 9; do curl -fsSL -b jar "$B/assets/d$i.bin" -o "s/assets/d$i.bin"; done
           rm -f jar
-          ls -la live live/assets
-      - name: Commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add live
-          git commit -m "Snapshot of the live demo from eat2save-demo.vercel.app" || echo "nothing to commit"
-          git push
+          cd s && find . -type f | sort | xargs sha1sum
