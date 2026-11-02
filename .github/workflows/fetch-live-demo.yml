@@ -5,6 +5,9 @@ on:
       share:
         description: 'Temporary _vercel_share token (expires within 24h)'
         required: true
+      base:
+        description: 'Deployment base URL'
+        required: true
 permissions:
   contents: write
 jobs:
@@ -15,10 +18,10 @@ jobs:
       - name: Download current deployment
         run: |
           set -e
-          B=https://eat2save-demo.vercel.app
+          B=${{ inputs.base }}
           mkdir -p live/assets live/cua-hang live/khach-hang live/quan-tri
           echo "::add-mask::${{ inputs.share }}"
-          curl -sS -c jar -o /dev/null -w "share %{http_code}\n" "$B/?_vercel_share=${{ inputs.share }}"
+          curl -sS -L -c jar -b jar -o /dev/null -w "share %{http_code}\n" "$B/?_vercel_share=${{ inputs.share }}"
           for p in "" cua-hang/ khach-hang/ quan-tri/; do curl -fsSL -b jar "$B/$p" -o "live/${p}index.html"; done
           for i in 0 1 2 3 4 5 6 7 8 9; do curl -fsSL -b jar "$B/assets/d$i.bin" -o "live/assets/d$i.bin"; done
           rm -f jar
