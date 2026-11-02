@@ -15,7 +15,8 @@ jobs:
           set -e
           B=https://eat2save-demo.vercel.app
           mkdir -p live/assets live/cua-hang live/khach-hang live/quan-tri
-          for p in "" cua-hang/ khach-hang/ quan-tri/; do curl -fsSL "$B/$p" -o "live/${p}index.html"; done
+          curl -sSL "$B/" -o live/index.html -w "root %{http_code}\n" || true
+          for p in cua-hang/ khach-hang/ quan-tri/; do curl -fsSL "$B/$p" -o "live/${p}index.html"; done
           for i in 0 1 2 3 4 5 6 7 8 9; do curl -fsSL "$B/assets/d$i.bin" -o "live/assets/d$i.bin"; done
           ls -la live live/assets
       - name: Commit
